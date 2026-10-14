@@ -1,0 +1,108 @@
+/* =====================================================================
+ * NEGOCIA · base.css — tokens de diseño, reset y tipografía
+ * Estética: corporativo moderno en modo oscuro. Acento ámbar (acuerdo),
+ * turquesa (confianza), coral (riesgo), azul (información).
+ * ===================================================================== */
+:root {
+  --fondo: #0b1020;
+  --fondo-2: #10172b;
+  --superficie: #161d2e;
+  --superficie-2: #1e2740;
+  --superficie-3: #27324f;
+  --borde: #2c3856;
+  --borde-fuerte: #3d4c73;
+  --texto: #eef1f8;
+  --texto-2: #c0c9dc;
+  --texto-3: #8f9bb6;
+  --ambar: #f2b84b;
+  --ambar-2: #ffd27a;
+  --ambar-osc: #b9821c;
+  --turquesa: #3cc6b0;
+  --turquesa-osc: #1f8f7e;
+  --coral: #ff6b6b;
+  --coral-osc: #c94848;
+  --azul: #5b8cff;
+  --violeta: #a78bfa;
+  --exito: var(--turquesa);
+  --error: var(--coral);
+  --aviso: var(--ambar);
+
+  --radio: 14px;
+  --radio-s: 9px;
+  --radio-xs: 6px;
+  --sombra: 0 12px 34px rgba(0, 0, 0, .38);
+  --sombra-s: 0 4px 14px rgba(0, 0, 0, .3);
+  --brillo-ambar: 0 0 0 1px rgba(242, 184, 75, .35), 0 8px 26px rgba(242, 184, 75, .18);
+
+  --fuente: "Inter", "SF Pro Text", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-display: "SF Pro Display", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fuente-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --t-rapida: 160ms;
+  --t-media: 320ms;
+  --t-lenta: 650ms;
+  --curva: cubic-bezier(.2, .8, .2, 1);
+  --curva-rebote: cubic-bezier(.34, 1.56, .64, 1);
+
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(1200px 700px at 70% -10%, #1b2647 0%, transparent 60%), var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, h4 { font-family: var(--fuente-display); line-height: 1.15; margin: 0 0 .5em; letter-spacing: -.01em; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; }
+h2 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); font-weight: 750; }
+h3 { font-size: 1.12rem; font-weight: 700; }
+p { margin: 0 0 .8em; }
+a { color: var(--ambar-2); }
+strong { font-weight: 700; color: var(--texto); }
+small { font-size: .85em; }
+::selection { background: rgba(242, 184, 75, .35); }
+
+/* Foco visible y consistente para navegación por teclado */
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--ambar);
+  outline-offset: 2px;
+  border-radius: var(--radio-xs);
+}
+
+.solo-lectores {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.saltar-contenido {
+  position: absolute; left: 12px; top: -60px; z-index: 1000;
+  background: var(--ambar); color: #1a1205; padding: 10px 16px; border-radius: var(--radio-s); font-weight: 700;
+  transition: top var(--t-rapida);
+}
+.saltar-contenido:focus { top: 12px; }
+
+/* Barra de desplazamiento discreta */
+* { scrollbar-width: thin; scrollbar-color: var(--borde-fuerte) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--borde-fuerte); border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+
+/* Movimiento reducido: el sistema operativo o el ajuste del juego */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+.sin-movimiento *, .sin-movimiento *::before, .sin-movimiento *::after {
+  animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important;
+}
+/* Los títulos reciben el foco por programa al cambiar de pantalla: sin anillo visual */
+[tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; }

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEGOCIA · Galería de personajes y escenas</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/escena.css">
+<style>
+  body { padding: 24px; }
+  h1 { margin-bottom: 4px; }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 16px 0 32px; }
+  .ficha { background: var(--superficie); border: 1px solid var(--borde); border-radius: 12px; padding: 8px; text-align: center; font-size: .8rem; color: var(--texto-2); }
+  .ficha svg { width: 100%; height: auto; border-radius: 8px; }
+  .escenas { display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); gap: 18px; }
+  .controles { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .controles button { background: var(--superficie-2); border: 1px solid var(--borde); border-radius: 8px; padding: 6px 10px; }
+</style>
+</head>
+<body>
+<h1>Galería de personajes</h1>
+<p>Herramienta de revisión visual (no forma parte del juego).</p>
+<h2>Expresiones</h2>
+<div id="expresiones" class="rejilla"></div>
+<h2>Diversidad (semillas aleatorias)</h2>
+<div id="diversidad" class="rejilla"></div>
+<h2>Escenas</h2>
+<div class="controles" id="controles"></div>
+<div id="escenas" class="escenas"></div>
+
+<script src="../js/nucleo/util.js"></script>
+<script src="../js/nucleo/estadoVisual.js"></script>
+<script src="../js/visual/avatar.js"></script>
+<script src="../js/visual/objetos.js"></script>
+<script src="../js/visual/escenas.js"></script>
+<script>
+  const jordi = { semilla: 11, genero: 'h', piel: 1, pelo: 'corto', colorPelo: '#8d8d8d', canas: 0.7, gafas: 'cuadradas', barba: 'perilla', ropa: 'blazer', colorRopa: '#3a4d6e', colorCamisa: '#e8eef6', corbata: '#8a2f3c', cara: 'cuadrada', edad: 56 };
+  const exps = NG.EstadoVisual.EXPRESIONES;
+  document.getElementById('expresiones').innerHTML = exps.map((e) => '<div class="ficha">' + NG.Avatar.retrato(jordi, { expresion: e, id: 'x' + e }) + e + '</div>').join('');
+  const div = [];
+  for (let i = 1; i <= 24; i++) div.push('<div class="ficha">' + NG.Avatar.retrato({ semilla: i * 7 }, { id: 'd' + i }) + 'semilla ' + i * 7 + '</div>');
+  document.getElementById('diversidad').innerHTML = div.join('');
+
+  const cont = document.getElementById('escenas');
+  const personajes = [
+    { id: 'jordi', nombre: 'Jordi Puig', avatar: jordi },
+    { id: 'b', nombre: 'Rosa Jiménez', avatar: { semilla: 51, genero: 'm', pelo: 'melena', ropa: 'jersey', colorRopa: '#7a3b52', edad: 49, piel: 2 } },
+    { id: 'c', nombre: 'Daniel Weber', avatar: { semilla: 52, genero: 'h', pelo: 'rapado', colorPelo: '#c8a05a', ropa: 'traje', colorRopa: '#26324a', corbata: '#5b8cff', piel: 0, edad: 44 } }
+  ];
+  const ctrls = [];
+  ['sala-proveedor', 'oficina-rrhh', 'sala-juntas', 'sala-adquisicion', 'despacho'].forEach((id) => {
+    const caja = document.createElement('div'); cont.appendChild(caja);
+    ctrls.push(NG.Escenas.montar(caja, id, { personajes: id === 'despacho' ? [] : [personajes[0]] }));
+  });
+  const caja = document.createElement('div'); cont.appendChild(caja);
+  ctrls.push(NG.Escenas.montar(caja, 'mesa-multiparte', { personajes: [{ id: 'med', nombre: 'Mediadora', avatar: { semilla: 77, genero: 'm', pelo: 'mono', ropa: 'blazer', colorRopa: '#4b4f58', edad: 58, gafas: 'finas' } }, personajes[1], personajes[2]] }));
+
+  const posturas = NG.EstadoVisual.POSTURAS;
+  const controles = document.getElementById('controles');
+  exps.forEach((e) => { const b = document.createElement('button'); b.textContent = e; b.onclick = () => ctrls.forEach((c) => Object.keys(c.avatares).forEach((k) => c.estado(k, { expresion: e }))); controles.appendChild(b); });
+  posturas.forEach((e) => { const b = document.createElement('button'); b.textContent = 'postura: ' + e; b.onclick = () => ctrls.forEach((c) => Object.keys(c.avatares).forEach((k) => c.estado(k, { postura: e, mirada: e === 'reloj' ? 'reloj' : e === 'movil' ? 'movil' : 'jugador' }))); controles.appendChild(b); });
+  NG.EstadoVisual.GESTOS.forEach((g) => { const b = document.createElement('button'); b.textContent = 'gesto: ' + g; b.onclick = () => ctrls.forEach((c) => Object.keys(c.avatares).forEach((k) => c.estado(k, { gesto: g }))); controles.appendChild(b); });
+  const br = document.createElement('button'); br.textContent = 'reloj urgente'; br.onclick = () => ctrls.forEach((c) => c.reloj(1, 10)); controles.appendChild(br);
+  const bm = document.createElement('button'); bm.textContent = 'móvil vibra'; bm.onclick = () => ctrls.forEach((c) => c.vibrarMovil()); controles.appendChild(bm);
+  const bc = document.createElement('button'); bc.textContent = 'coalición'; bc.onclick = () => ctrls.forEach((c) => c.coalicion(true)); controles.appendChild(bc);
+  ctrls.forEach((c) => c.reloj(6, 10));
+
+  // Modo de una sola escena a pantalla completa: ?escena=id&expresion=x&postura=y
+  const q = new URLSearchParams(location.search);
+  if (q.get('escena')) {
+    document.body.innerHTML = '<div id="solo" style="position:fixed;inset:0"></div>';
+    document.body.style.padding = '0';
+    const id = q.get('escena');
+    const pers = id === 'mesa-multiparte'
+      ? [{ id: 'med', nombre: 'Mediadora', avatar: { semilla: 77, genero: 'm', pelo: 'mono', ropa: 'blazer', colorRopa: '#4b4f58', edad: 58, gafas: 'finas' } }, personajes[1], personajes[2]]
+      : id === 'despacho' ? [] : [personajes[0]];
+    const c = NG.Escenas.montar(document.getElementById('solo'), id, { personajes: pers, entrada: false });
+    c.el.style.borderRadius = '0'; c.el.style.height = '100%';
+    c.reloj(+(q.get('paciencia') || 6), 10);
+    Object.keys(c.avatares).forEach((k) => c.estado(k, { expresion: q.get('expresion') || 'neutral', postura: q.get('postura') || 'reposo', mirada: q.get('mirada') || 'jugador' }));
+    if (q.get('coalicion')) c.coalicion(true);
+  }
+</script>
+</body>
+</html>
