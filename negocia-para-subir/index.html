@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NEGOCIA · El arte de negociar</title>
+  <meta name="description" content="Serious game para entrenar a directivos en negociación y toma de decisiones bajo presión: prepara, negocia contra personajes con intereses ocultos y aprende de tus sesgos.">
+  <meta name="theme-color" content="#0b1020">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1020'/%3E%3Cpath d='M8 16 L30 32 L8 48 L8 38 L17 32 L8 26 Z' fill='%23f2b84b'/%3E%3Cpath d='M56 16 L34 32 L56 48 L56 38 L47 32 L56 26 Z' fill='%233cc6b0'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/escena.css">
+  <link rel="stylesheet" href="css/pantallas.css">
+</head>
+<body>
+  <a class="saltar-contenido" href="#pantalla">Saltar al contenido</a>
+  <div id="app" class="app">
+    <header id="barra" class="barra" hidden>
+      <button type="button" class="barra-logo" aria-label="Volver al menú principal"></button>
+      <div id="barra-titulo" class="barra-titulo"></div>
+      <div class="barra-acciones">
+        <span id="barra-rango" class="insignia-rango"></span>
+        <button type="button" id="btn-ayuda" class="btn-icono" aria-label="Cómo se juega"></button>
+        <button type="button" id="btn-sonido" class="btn-icono" aria-pressed="true" aria-label="Silenciar el sonido"></button>
+        <button type="button" id="btn-ajustes" class="btn-icono" aria-label="Ajustes"></button>
+      </div>
+    </header>
+    <main id="pantalla" class="pantalla" tabindex="-1"></main>
+  </div>
+  <div id="capa-modal" class="capa-modal" hidden></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="anunciador" class="solo-lectores" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p style="padding:24px">NEGOCIA necesita JavaScript para funcionar.</p></noscript>
+
+  <!-- Núcleo puro (sin DOM): también se carga en Node para los tests -->
+  <script src="js/nucleo/util.js"></script>
+  <script src="js/nucleo/personalidades.js"></script>
+  <script src="js/nucleo/analisis.js"></script>
+  <script src="js/datos/dialogos.js"></script>
+  <script src="js/datos/conceptos.js"></script>
+  <script src="js/datos/logros.js"></script>
+  <!-- Escenarios (un archivo de datos por escenario) -->
+  <script src="js/datos/escenarios/e1-proveedor.js"></script>
+  <script src="js/datos/escenarios/e2-talento.js"></script>
+  <script src="js/datos/escenarios/e3-cliente.js"></script>
+  <script src="js/datos/escenarios/e4-adquisicion.js"></script>
+  <script src="js/datos/escenarios/e5-multiparte.js"></script>
+  <script src="js/nucleo/preparacion.js"></script>
+  <script src="js/nucleo/motor.js"></script>
+  <script src="js/nucleo/sesgos.js"></script>
+  <script src="js/nucleo/puntuacion.js"></script>
+  <script src="js/nucleo/progreso.js"></script>
+  <script src="js/nucleo/estadoVisual.js"></script>
+  <script src="js/ia/cliente-ia.js"></script>
+  <!-- Capa visual -->
+  <script src="js/visual/avatar.js"></script>
+  <script src="js/visual/objetos.js"></script>
+  <script src="js/visual/escenas.js"></script>
+  <script src="js/visual/efectos.js"></script>
+  <script src="js/visual/cinematicas.js"></script>
+  <script src="js/audio/sonido.js"></script>
+  <!-- Interfaz -->
+  <script src="js/ui/componentes.js"></script>
+  <script src="js/ui/app.js"></script>
+  <script src="js/ui/ajustes.js"></script>
+  <script src="js/ui/editor.js"></script>
+  <script src="js/ui/tutorial.js"></script>
+  <script src="js/ui/evento.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/briefing.js"></script>
+  <script src="js/ui/preparacion.js"></script>
+  <script src="js/ui/negociacion.js"></script>
+  <script src="js/ui/debrief.js"></script>
+  <script src="js/ui/debrief-extra.js"></script>
+  <script src="js/ui/mapa.js"></script>
+  <script src="js/ui/biblioteca.js"></script>
+  <script src="js/ui/logros.js"></script>
+</body>
+</html>

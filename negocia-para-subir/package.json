@@ -1,0 +1,12 @@
+{
+  "name": "negocia",
+  "version": "1.0.0",
+  "description": "Serious game de negociación y toma de decisiones para directivos (HTML + CSS + JS, sin dependencias).",
+  "private": true,
+  "scripts": {
+    "test": "node tests/ejecutar.js",
+    "simular": "node tests/simulacion.js",
+    "servir": "node herramientas/servidor-estatico.js"
+  },
+  "license": "UNLICENSED"
+}
